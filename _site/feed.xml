@@ -1,4 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-29T20:55:25+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Soohan Ahn</title><subtitle></subtitle><entry><title type="html">gRPC load balancing on Kubernetes</title><link href="http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll.html" rel="alternate" type="text/html" title="gRPC load balancing on Kubernetes" /><published>2019-01-29T18:54:36+09:00</published><updated>2019-01-29T18:54:36+09:00</updated><id>http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll.html">&lt;p&gt;Here is my slide, and this is my first post on this blog!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-29T21:21:39+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Soohan Ahn</title><subtitle></subtitle><entry><title type="html">Using Go module.</title><link href="http://localhost:4000/jekyll/update/2019/01/29/go-module-1.html" rel="alternate" type="text/html" title="Using Go module." /><published>2019-01-29T21:19:36+09:00</published><updated>2019-01-29T21:19:36+09:00</updated><id>http://localhost:4000/jekyll/update/2019/01/29/go-module-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2019/01/29/go-module-1.html">&lt;h2 id=&quot;what-is-go-module&quot;&gt;What is Go Module?&lt;/h2&gt;
+&lt;p&gt;It is dependency management!&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-good&quot;&gt;What is good?&lt;/h2&gt;
+&lt;p&gt;We don’t need vendor/ directory any more!
+In addition, it is very simple to use. If we want to add some dependent package, all we have to do is just &lt;code class=&quot;highlighter-rouge&quot;&gt;go get [Package]&lt;/code&gt;.
+All of the things are done by automatically. Very simple!&lt;/p&gt;
+
+&lt;h2 id=&quot;do-we-have-to&quot;&gt;Do we have to?&lt;/h2&gt;
+&lt;p&gt;Simply, YES.
+Even if you are using a dep instead of Go module, you have to migrate it to Go module.
+From Go 1.13, &lt;code class=&quot;highlighter-rouge&quot;&gt;$GOPATH&lt;/code&gt; will be deprecated. (See https://blog.golang.org/modules2019 )&lt;/p&gt;
+
+&lt;h2 id=&quot;how-do-we-do-it&quot;&gt;How do we do it?&lt;/h2&gt;
+&lt;p&gt;The first step to do is go to the project path and type below.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go mod init&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;It will create the file for the Go module(go.mod).
+If you already have Gopkg.lock, it will create automatically based on this file.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ahn-soohan@Mac-261:fout/proj$ go mod init
+go: creating new go.mod: module github.com/fout/rfp_go
+go: copying requirements from Gopkg.lock
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After that, remove Gopkg.*.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ahn-soohan@Mac-261:fout/proj$ rm Gopkg.*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;tools&quot;&gt;Tools&lt;/h2&gt;
+&lt;p&gt;If you are using some tools for building your project, you should get the packages and add them to go.mod by yourself.&lt;/p&gt;
+
+&lt;p&gt;Example)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go get golang.org/x/tools/cmd/goimports
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;OK. Now, go.mod has been updated.
+If you want to use these tools on the new server (or maybe initialized Docker environment or CI server),
+all you have to do is below.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go mod download
+go install $$pkg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It would be good if you add these commands to the Makefile or those kinds of files.&lt;/p&gt;
+
+&lt;h2 id=&quot;environment&quot;&gt;Environment&lt;/h2&gt;
+&lt;p&gt;Don’t forget to set &lt;code class=&quot;highlighter-rouge&quot;&gt;GO111MODULE=on&lt;/code&gt; on your environment!&lt;/p&gt;
+
+&lt;h2 id=&quot;struggled&quot;&gt;Struggled&lt;/h2&gt;
+&lt;p&gt;We are using &lt;code class=&quot;highlighter-rouge&quot;&gt;goimports&lt;/code&gt; on a building project. However, there was an issue that it became extremely slow if we use Go module. ( https://github.com/golang/go/issues/27287 )
+I think it was an issue related to call all of the dependency package lists. It was solved in &lt;a href=&quot;https://github.com/golang/tools/commit/537d06c362073e8c95164d0d4709059603cfdb02&quot;&gt;here&lt;/a&gt;.
+Therefore, I updated this package.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;go get -u=patch golang.org/x/tools
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you want to update module, all you have to do is &lt;code class=&quot;highlighter-rouge&quot;&gt;go get&lt;/code&gt;. Simple!&lt;/p&gt;</content><author><name></name></author><summary type="html">What is Go Module? It is dependency management!</summary></entry><entry><title type="html">gRPC load balancing on Kubernetes</title><link href="http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll.html" rel="alternate" type="text/html" title="gRPC load balancing on Kubernetes" /><published>2019-01-29T18:54:36+09:00</published><updated>2019-01-29T18:54:36+09:00</updated><id>http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2019/01/29/welcome-to-jekyll.html">&lt;p&gt;Here is my slide, and this is my first post on this blog!&lt;/p&gt;
 
 &lt;iframe src=&quot;//www.slideshare.net/slideshow/embed_code/key/comLmUndBqkjZR&quot; width=&quot;595&quot; height=&quot;485&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen=&quot;&quot;&gt; &lt;/iframe&gt;
 &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;//www.slideshare.net/SoohanAhn/grpc-load-balancing&quot; title=&quot;Grpc load balancing&quot; target=&quot;_blank&quot;&gt;Grpc load balancing&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;//www.slideshare.net/SoohanAhn&quot; target=&quot;_blank&quot;&gt;Soohan Ahn&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;</content><author><name></name></author><summary type="html">Here is my slide, and this is my first post on this blog!</summary></entry></feed>

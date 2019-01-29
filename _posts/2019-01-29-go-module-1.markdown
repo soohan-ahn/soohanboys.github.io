@@ -1,0 +1,75 @@
+---
+layout: post
+title:  "Using Go module."
+date:   2019-01-29 21:19:36 +0900
+categories: jekyll update
+---
+
+## What is Go Module?
+It is dependency management!
+
+## What is good?
+We don't need vendor/ directory any more!
+In addition, it is very simple to use. If we want to add some dependent package, all we have to do is just `go get [Package]`.
+All of the things are done by automatically. Very simple!
+
+## Do we have to?
+Simply, YES.
+Even if you are using a dep instead of Go module, you have to migrate it to Go module.
+From Go 1.13, `$GOPATH` will be deprecated. (See https://blog.golang.org/modules2019 )
+
+## How do we do it?
+The first step to do is go to the project path and type below.
+
+`go mod init`
+
+It will create the file for the Go module(go.mod).
+If you already have Gopkg.lock, it will create automatically based on this file.
+
+```
+ahn-soohan@Mac-261:fout/proj$ go mod init
+go: creating new go.mod: module github.com/fout/rfp_go
+go: copying requirements from Gopkg.lock
+```
+
+After that, remove Gopkg.*.
+
+```
+ahn-soohan@Mac-261:fout/proj$ rm Gopkg.*
+```
+
+## Tools
+If you are using some tools for building your project, you should get the packages and add them to go.mod by yourself.
+
+Example)
+
+```
+go get golang.org/x/tools/cmd/goimports
+```
+
+OK. Now, go.mod has been updated.
+If you want to use these tools on the new server (or maybe initialized Docker environment or CI server),
+all you have to do is below.
+
+```
+go mod download
+go install $$pkg
+```
+
+It would be good if you add these commands to the Makefile or those kinds of files.
+
+## Environment
+Don't forget to set `GO111MODULE=on` on your environment!
+
+## Struggled
+We are using `goimports` on a building project. However, there was an issue that it became extremely slow if we use Go module. ( https://github.com/golang/go/issues/27287 )
+I think it was an issue related to call all of the dependency package lists. It was solved in [here](https://github.com/golang/tools/commit/537d06c362073e8c95164d0d4709059603cfdb02).
+Therefore, I updated this package.
+
+```
+go get -u=patch golang.org/x/tools
+```
+
+If you want to update module, all you have to do is `go get`. Simple!
+
+
