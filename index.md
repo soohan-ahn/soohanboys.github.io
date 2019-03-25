@@ -8,7 +8,11 @@ title: About me
 
 ## Work Experience
 
-#### Software Engineer, [FreakOut Inc](https://fout.jp), Tokyo, Japan (2015.08 - )
+#### Software Engineer, [Moloco Inc](https://molocoads.com), Seoul, Korea (2019.03 - )
+* Working as a backend engineer to deliver online advertisements(DSP).
+* Go.
+
+#### Software Engineer, [FreakOut Inc](https://fout.jp), Tokyo, Japan (2015.08 - 2019.03)
 
 * Working as a backend engineer to deliver online advertisements(DSP, SSP).
 * Implemented RTB(Real-Time Bidding) protocol to serve online advertisements in less than 100ms.
